@@ -1,0 +1,37 @@
+package SoalSiji;
+
+public class Monitoring implements Runnable {
+    private Gudang gudang;
+
+    public Monitoring(Gudang gudang) {
+        this.gudang = gudang;
+    }
+
+    @Override
+    public void run() {
+        try {
+            while (!Thread.currentThread().isInterrupted()) {
+                tampilkanStatus();
+                Thread.sleep(1000);
+            }
+        } catch (InterruptedException e) {
+            System.out.println(" [MONITORING] Berhenti memantau.");
+        }
+    }
+
+    private void tampilkanStatus() {
+        int stok = gudang.getStok();
+        int maks = gudang.getKapasitasMaksimal();
+
+        int panjangBar = 20;
+        int isi = (int) ((double) stok / maks * panjangBar);
+        int kosong = panjangBar - isi;
+        int persen = (int) ((double) stok / maks * 100);
+
+        String bar = "";
+        for (int i = 0; i < isi; i++) bar += "#";
+        for (int i = 0; i < kosong; i++) bar += "-";
+
+        System.out.println("  Status Gudang: [" + bar + "] " + persen + "% (" + stok + "/" + maks + ")");
+    }
+}
